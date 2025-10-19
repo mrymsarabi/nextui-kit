@@ -1,16 +1,21 @@
+"use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Modal } from "@/components/ui/modal";
 
 export default function Home() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <main className="p-10 space-y-10 bg-[var(--color-background)] text-[var(--color-foreground)]">
       {/* Buttons Section */}
       <section>
         <h2 className="text-2xl font-bold mb-4">Buttons</h2>
         <div className="space-x-3">
-          <Button>Primary</Button>
+          <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
           <Button variant="secondary">Secondary</Button>
           <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
@@ -30,11 +35,9 @@ export default function Home() {
           <Card title="Basic Card" description="A simple, clean card for content.">
             <Button variant="secondary">Learn More</Button>
           </Card>
-
           <Card title="Profile Card" description="Show user details or profile info.">
             <Input placeholder="Edit name..." />
           </Card>
-
           <Card title="Analytics Card" description="Display some data or summary.">
             <p className="text-sm text-gray-500 dark:text-gray-400">Total users: 1,203</p>
           </Card>
@@ -54,7 +57,15 @@ export default function Home() {
         </div>
       </section>
 
-      
+      {/* Modal */}
+      <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Hello There 👋">
+        <p className="text-gray-600 dark:text-gray-300 mb-4">
+          This is a simple modal component built with Tailwind + React.
+        </p>
+        <Button variant="secondary" onClick={() => setIsOpen(false)}>
+          Close
+        </Button>
+      </Modal>
     </main>
   );
 }
