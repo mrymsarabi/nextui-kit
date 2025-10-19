@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
   return (
@@ -39,6 +40,21 @@ export default function Home() {
           </Card>
         </div>
       </section>
+
+      {/* Badges Section */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Badges</h2>
+        <div className="flex flex-wrap gap-3">
+          <Badge>Default</Badge>
+          <Badge variant="secondary">Secondary</Badge>
+          <Badge variant="success">Success</Badge>
+          <Badge variant="warning">Warning</Badge>
+          <Badge variant="destructive">Error</Badge>
+          <Badge variant="outline">Outline</Badge>
+        </div>
+      </section>
+
+      
     </main>
   );
 }
