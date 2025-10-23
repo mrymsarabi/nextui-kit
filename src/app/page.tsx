@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
-import Toggle from '@/components/ui/Toggle';
+import { ToggleSwitch } from "@/components/ui/toggleSwitch";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,9 +60,10 @@ export default function Home() {
 
       {/* Toggle Switch Section */}
       <section>
-        <div className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Toggle</h2>
-          <Toggle />
+        <div className="flex flex-col gap-6">
+          <ToggleSwitch variant="primary" label="Primary toggle" />
+          <ToggleSwitch variant="secondary" label="Secondary toggle" initial />
+          <ToggleSwitch variant="ghost" size="lg" label="Ghost toggle" />
         </div>
       </section>
 
