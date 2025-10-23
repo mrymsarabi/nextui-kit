@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
+import Toggle from '@/components/ui/Toggle';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +55,14 @@ export default function Home() {
           <Badge variant="warning">Warning</Badge>
           <Badge variant="destructive">Error</Badge>
           <Badge variant="outline">Outline</Badge>
+        </div>
+      </section>
+
+      {/* Toggle Switch Section */}
+      <section>
+        <div className="p-6">
+          <h2 className="text-xl font-semibold mb-4">Toggle</h2>
+          <Toggle />
         </div>
       </section>
 
