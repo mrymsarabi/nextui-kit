@@ -6,9 +6,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
 import { ToggleSwitch } from "@/components/ui/toggleSwitch";
+import { Pagination } from "@/components/ui/pagination"; // 👈 import it
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
+  const [page, setPage] = useState(1); // 👈 state for pagination
 
   return (
     <main className="p-10 space-y-10 bg-[var(--color-background)] text-[var(--color-foreground)]">
@@ -60,10 +62,27 @@ export default function Home() {
 
       {/* Toggle Switch Section */}
       <section>
+        <h2 className="text-2xl font-bold mb-4">Toggles</h2>
         <div className="flex flex-col gap-6">
           <ToggleSwitch variant="primary" label="Primary toggle" />
           <ToggleSwitch variant="secondary" label="Secondary toggle" initial />
           <ToggleSwitch variant="ghost" size="lg" label="Ghost toggle" />
+        </div>
+      </section>
+
+      {/* Pagination Section */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Pagination</h2>
+        <div className="flex flex-col items-center gap-4">
+          <Pagination
+            totalPages={5}
+            currentPage={page}
+            onPageChange={setPage}
+            variant="primary"
+          />
+          <p className="text-sm text-[var(--color-foreground)]">
+            Current Page: {page}
+          </p>
         </div>
       </section>
 
