@@ -10,7 +10,10 @@ import { Pagination } from "@/components/ui/pagination"; // 👈 import it
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
-  const [page, setPage] = useState(1); // 👈 state for pagination
+
+  const [pageFull, setPageFull] = useState(1);
+  const [pageTruncated, setPageTruncated] = useState(5);
+  const [pageMinimal, setPageMinimal] = useState(3);
 
   return (
     <main className="p-10 space-y-10 bg-[var(--color-background)] text-[var(--color-foreground)]">
@@ -71,21 +74,33 @@ export default function Home() {
       </section>
 
       {/* Pagination Section */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Pagination</h2>
-        <div className="flex flex-col items-center gap-4">
-          <Pagination
-            totalPages={5}
-            currentPage={page}
-            onPageChange={setPage}
-            variant="primary"
-          />
-          <p className="text-sm text-[var(--color-foreground)]">
-            Current Page: {page}
-          </p>
-        </div>
-      </section>
-
+ <section>
+      <h2 className="text-2xl font-bold mb-4">Pagination Variants</h2>
+      <div className="flex flex-col gap-6">
+        <Pagination
+          totalPages={5}
+          currentPage={pageFull}
+          onPageChange={setPageFull}
+          mode="full"
+          variant="primary"
+        />
+        <Pagination
+          totalPages={12}
+          currentPage={pageTruncated}
+          onPageChange={setPageTruncated}
+          mode="truncated"
+          variant="outline"
+        />
+        <Pagination
+          totalPages={10}
+          currentPage={pageMinimal}
+          onPageChange={setPageMinimal}
+          mode="minimal"
+          variant="ghost"
+        />
+      </div>
+    </section>
+    
       {/* Modal */}
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Hello There 👋">
         <p className="text-gray-600 dark:text-gray-300 mb-4">

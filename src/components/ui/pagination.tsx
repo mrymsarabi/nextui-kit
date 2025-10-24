@@ -1,100 +1,121 @@
 "use client";
 
-import { cva, type VariantProps } from "class-variance-authority";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const paginationButton = cva(
-  "flex items-center justify-center rounded-[var(--radius-card)] text-sm font-medium transition-all select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
-  {
-    variants: {
-      variant: {
-        primary:
-          "bg-[var(--color-primary)] text-white hover:opacity-90 focus-visible:ring-[var(--color-primary)]",
-        secondary:
-          "bg-[var(--color-secondary)] text-white hover:opacity-90 focus-visible:ring-[var(--color-secondary)]",
-        outline:
-          "border border-[var(--color-foreground)] text-[var(--color-foreground)] hover:bg-[var(--color-foreground)] hover:text-[var(--color-background)]",
-        ghost:
-          "text-[var(--color-foreground)] hover:bg-[var(--color-foreground)]/10",
-      },
-      size: {
-        sm: "h-8 w-8",
-        md: "h-9 w-9",
-        lg: "h-10 w-10 text-base",
-      },
-    },
-    defaultVariants: {
-      variant: "outline",
-      size: "md",
-    },
-  }
-);
-
-interface PaginationProps extends VariantProps<typeof paginationButton> {
+interface PaginationProps {
   totalPages: number;
-  currentPage: number;
-  onPageChange: (page: number) => void;
+  initialPage?: number;
+  currentPage?: number; // 🔥 added for external control
+  onPageChange?: (page: number) => void; // 🔥 added callback
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
+  mode?: "minimal" | "truncated" | "full"; // different display styles
 }
 
 export function Pagination({
   totalPages,
-  currentPage,
+  initialPage = 1,
+  currentPage: controlledPage,
   onPageChange,
-  variant,
-  size,
+  variant = "outline",
+  size = "md",
+  mode = "truncated",
 }: PaginationProps) {
-  const handleClick = (page: number) => {
-    if (page !== currentPage && page >= 1 && page <= totalPages) {
-      onPageChange(page);
+  // if controlledPage is provided, component acts as controlled
+  const [internalPage, setInternalPage] = useState(initialPage);
+  const currentPage = controlledPage ?? internalPage;
+
+  useEffect(() => {
+    if (controlledPage !== undefined) {
+      setInternalPage(controlledPage);
     }
+  }, [controlledPage]);
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    if (onPageChange) onPageChange(page);
+    else setInternalPage(page);
   };
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const renderPageButton = (page: number) => (
+    <Button
+      key={`page-${page}`}
+      variant={page === currentPage ? "primary" : variant}
+      size={size}
+      className={cn(
+        "rounded-full w-10 h-10 transition-all duration-150",
+        page === currentPage
+          ? "bg-[var(--color-primary)] text-white shadow-sm"
+          : "text-[var(--color-foreground)] hover:bg-[var(--color-foreground)]/10"
+      )}
+      onClick={() => handlePageChange(page)}
+    >
+      {page}
+    </Button>
+  );
+
+  const renderPageNumbers = () => {
+    if (mode === "minimal") return null;
+
+    if (mode === "full" || totalPages <= 7) {
+      return [...Array(totalPages)].map((_, i) => renderPageButton(i + 1));
+    }
+
+    // truncated mode logic
+    const pages: (number | string)[] = [];
+    if (currentPage > 3) pages.push(1, "start-ellipsis");
+    for (
+      let i = Math.max(1, currentPage - 1);
+      i <= Math.min(totalPages, currentPage + 1);
+      i++
+    ) {
+      pages.push(i);
+    }
+    if (currentPage < totalPages - 2) pages.push("end-ellipsis", totalPages);
+
+    return pages.map((page, i) =>
+      typeof page === "number" ? (
+        renderPageButton(page)
+      ) : (
+        <span
+          key={`ellipsis-${i}`}
+          className="px-2 text-gray-400 flex items-center justify-center"
+        >
+          <MoreHorizontal className="w-4 h-4" />
+        </span>
+      )
+    );
+  };
 
   return (
-    <div className="flex items-center justify-center gap-2">
-      {/* Previous */}
-      <button
-        onClick={() => handleClick(currentPage - 1)}
+    <div className="flex items-center justify-center gap-2 mt-6 select-none">
+      {/* Previous Button */}
+      <Button
+        variant={variant}
+        size={size}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={cn(paginationButton({ variant, size }))}
+        className="rounded-full w-10 h-10 flex items-center justify-center"
       >
-        ←
-      </button>
+        <ChevronLeft className="w-4 h-4" />
+      </Button>
 
-      {/* Pages */}
-      {pages.map((page) => (
-        <motion.button
-          key={page}
-          onClick={() => handleClick(page)}
-          whileTap={{ scale: 0.9 }}
-          animate={{
-            scale: page === currentPage ? 1.1 : 1,
-            backgroundColor:
-              page === currentPage
-                ? "var(--color-primary)"
-                : "transparent",
-            color:
-              page === currentPage
-                ? "white"
-                : "var(--color-foreground)",
-          }}
-          transition={{ duration: 0.25 }}
-          className={cn(paginationButton({ variant, size }), "relative")}
-        >
-          {page}
-        </motion.button>
-      ))}
+      {/* Page Numbers */}
+      <div className="flex items-center gap-2">{renderPageNumbers()}</div>
 
-      {/* Next */}
-      <button
-        onClick={() => handleClick(currentPage + 1)}
+      {/* Next Button */}
+      <Button
+        variant={variant}
+        size={size}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={cn(paginationButton({ variant, size }))}
+        className="rounded-full w-10 h-10 flex items-center justify-center"
       >
-        →
-      </button>
+        <ChevronRight className="w-4 h-4" />
+      </Button>
     </div>
   );
 }
