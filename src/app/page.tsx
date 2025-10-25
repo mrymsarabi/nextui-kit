@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
 import { ToggleSwitch } from "@/components/ui/toggleSwitch";
 import { Pagination } from "@/components/ui/pagination";
-import { RadioGroup } from "@/components/ui/radio"; // 👈 new import
+import { RadioGroup } from "@/components/ui/radio";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -147,6 +148,84 @@ export default function Home() {
             variant="ghost"
             mode="minimal"
           />
+        </div>
+      </section>
+
+      {/* 🧭 Breadcrumbs Section */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Breadcrumb Variants</h2>
+        <div className="space-y-8">
+          {/* Default (slash separator) */}
+          <div>
+            <h3 className="font-semibold mb-3">Default</h3>
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "#" },
+                { label: "Shop", href: "#" },
+                { label: "Product", href: "#" },
+              ]}
+              variant="default"
+              separator="slash"
+            />
+          </div>
+
+          {/* Chevron (modern look) */}
+          <div>
+            <h3 className="font-semibold mb-3">Chevron</h3>
+            <Breadcrumbs
+              items={[
+                { label: "Dashboard", href: "#" },
+                { label: "Settings", href: "#" },
+                { label: "Team", href: "#" },
+              ]}
+              variant="chevron"
+              separator="chevron"
+            />
+          </div>
+
+          {/* Pill (soft rounded tags) */}
+          <div>
+            <h3 className="font-semibold mb-3">Pill</h3>
+            <Breadcrumbs
+              items={[
+                { label: "Portfolio", href: "#" },
+                { label: "Web Projects", href: "#" },
+                { label: "Next.js Kit" },
+              ]}
+              variant="pill"
+              separator="dot"
+            />
+          </div>
+
+          {/* Underline (minimal underline hover) */}
+          <div>
+            <h3 className="font-semibold mb-3">Underline</h3>
+            <Breadcrumbs
+              items={[
+                { label: "Docs", href: "#" },
+                { label: "Components", href: "#" },
+                { label: "Breadcrumbs" },
+              ]}
+              variant="underline"
+              separator="custom"
+              customSeparator=">"
+            />
+          </div>
+
+          {/* Custom Separator Example */}
+          <div>
+            <h3 className="font-semibold mb-3">Custom Separator</h3>
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "#" },
+                { label: "Blog", href: "#" },
+                { label: "Latest Post" },
+              ]}
+              variant="default"
+              separator="custom"
+              customSeparator="✨"
+            />
+          </div>
         </div>
       </section>
 
